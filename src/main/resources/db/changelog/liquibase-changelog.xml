@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+<changeSet id="1" author="evans">
+
+    <createTable tableName="country">
+        <column name="id" type="BIGINT" autoIncrement="true">
+            <constraints primaryKey="true" nullable="false"/>
+        </column>
+        <column name="name" type="VARCHAR(255)"/>
+        <column name="code" type="VARCHAR(255)"/>
+    </createTable>
+    <createTable tableName="permission">
+        <column name="code" type="VARCHAR(255)">
+            <constraints primaryKey="true" nullable="false"/>
+        </column>
+        <column name="name" type="VARCHAR(255)"/>
+    </createTable>
+
+    <createTable tableName="client">
+        <column name="id" type="BIGINT">
+            <constraints primaryKey="true" nullable="false"/>
+        </column>
+        <column name="client_name" type="VARCHAR(255)" />
+        <column name="client_code" type="BIGINT"/>
+        <column name="correlator" type="VARCHAR(255)"/>
+        <column name="date_created" type="TIMESTAMP" />
+    </createTable>
+    <createTable tableName="roles">
+        <column name="code" type="VARCHAR(255)">
+            <constraints primaryKey="true" nullable="false"/>
+        </column>
+        <column name="name" type="VARCHAR(255)"/>
+        <column name="createdBy" type="INTEGER"/>
+        <column name="dateCreated" type="TIMESTAMP"/>
+    </createTable>
+
+    <createTable tableName="token">
+        <column name="token_id" type="INTEGER">
+            <constraints primaryKey="true" nullable="false"/>
+        </column>
+        <column name="token" type="VARCHAR(255)"/>
+        <column name="expiryDate" type="TIMESTAMP"/>
+    </createTable>
+    <createTable tableName="employees">
+        <column name="id" type="INTEGER">
+            <constraints primaryKey="true" nullable="false"/>
+        </column>
+        <column name="code" type="VARCHAR(255)"/>
+        <column name="firstName" type="VARCHAR(255)"/>
+        <column name="lastName" type="VARCHAR(255)"/>
+        <column name="phoneNumber" type="VARCHAR(255)"/>
+        <column name="emailAddress" type="VARCHAR(255)"/>
+        <column name="identityNumber" type="VARCHAR(255)"/>
+        <column name="staffNo" type="VARCHAR(255)"/>
+        <column name="status" type="BOOLEAN"/>
+        <column name="correlator" type="VARCHAR(255)"/>
+        <column name="country_code" type="BIGINT"/>
+        <column name="client_id" type="BIGINT"/>
+        <column name="token_id" type="INTEGER"/>
+        <column name="dateCreated" type="TIMESTAMP"/>
+    </createTable>
+    <createTable tableName="user">
+        <column name="id" type="INTEGER">
+            <constraints primaryKey="true" nullable="false"/>
+        </column>
+        <column name="firstName" type="VARCHAR(255)"/>
+        <column name="lastName" type="VARCHAR(255)"/>
+        <column name="phoneNumber" type="VARCHAR(255)"/>
+        <column name="emailAddress" type="VARCHAR(255)"/>
+        <column name="staffNo" type="VARCHAR(255)"/>
+        <column name="correlator" type="VARCHAR(255)"/>
+        <column name="client_id" type="BIGINT"/>
+        <column name="country_id" type="BIGINT"/>
+        <column name="token_id" type="INTEGER"/>
+    </createTable>
+    <createTable tableName="user_permission">
+        <column name="user_id" type="INTEGER">
+            <constraints nullable="false"/>
+        </column>
+        <column name="permission_id" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+        </column>
+    </createTable>
+
+    <createTable tableName="role_permission">
+        <column name="role_id" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+        </column>
+        <column name="permission_id" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+        </column>
+    </createTable>
+
+</changeSet>
+<changeSet id="2" author="evans">
+    <addForeignKeyConstraint baseColumnNames="client_id"
+                             baseTableName="employees"
+                             constraintName="FK_Employees_Client"
+                             referencedColumnNames="id"
+                             referencedTableName="client"/>
+
+    <addForeignKeyConstraint baseColumnNames="country_code"
+                             baseTableName="employees"
+                             constraintName="FK_Employees_Country"
+                             referencedColumnNames="id"
+                             referencedTableName="country"/>
+
+    <addForeignKeyConstraint baseColumnNames="client_id"
+                             baseTableName="user"
+                             constraintName="FK_User_Client"
+                             referencedColumnNames="id"
+                             referencedTableName="client"/>
+
+    <addForeignKeyConstraint baseColumnNames="country_id"
+                             baseTableName="user"
+                             constraintName="FK_User_Country"
+                             referencedColumnNames="id"
+                             referencedTableName="country"/>
+
+    <addForeignKeyConstraint baseColumnNames="user_id"
+                             baseTableName="user_permission"
+                             constraintName="FK_UserPermission_User"
+                             referencedColumnNames="id"
+                             referencedTableName="user"/>
+
+    <addForeignKeyConstraint baseColumnNames="permission_id"
+                             baseTableName="user_permission"
+                             constraintName="FK_UserPermission_Permission"
+                             referencedColumnNames="code"
+                             referencedTableName="permission"/>
+
+    <addForeignKeyConstraint baseColumnNames="role_id"
+                             baseTableName="role_permission"
+                             constraintName="FK_RolePermission_Roles"
+                             referencedColumnNames="code"
+                             referencedTableName="roles"/>
+
+    <addForeignKeyConstraint baseColumnNames="permission_id"
+                             baseTableName="role_permission"
+                             constraintName="FK_RolePermission_Permission"
+                             referencedColumnNames="code"
+                             referencedTableName="permission"/>
+</changeSet>
+</databaseChangeLog>

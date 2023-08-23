@@ -1,0 +1,13 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+
+    <changeSet id="1" author="evans">
+        <sql>
+            INSERT INTO country (name, code) VALUES ('Kenya', 'KE');
+            INSERT INTO country (name, code) VALUES ('Uganda', 'UG');
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>
